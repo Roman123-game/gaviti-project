@@ -1,30 +1,28 @@
 <script setup>
 import { ref, onMounted } from 'vue';
+import.meta.env.VITE_TMDB_API_KEY;
 
-// TMDb API details
 const url = 'https://api.themoviedb.org/3/movie/popular';
 const options = {
   method: 'GET',
   headers: {
     accept: 'application/json',
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3MjFlNzU5ZjEwM2NkYTY1NzFlZDhhZGJiY2ZlZjE5OSIsIm5iZiI6MTczNTU0Mzg0NC40NzcsInN1YiI6IjY3NzI0YzI0M2ZjNzZlYTU4ODkyNzVjYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.J8wzs1i-Kan6NSVDQ2tywg95rglnYgQUpHK7_E4pACs'
+    Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`
   }
 };
 
-// Reactive state variables
 const movies = ref([]);
 const page = ref(1);
 const totalPages = ref(1);
 const isLoading = ref(false);
 
-// Function to fetch data from TMDb API
 const fetchMovies = async (pageNum = 1) => {
-  isLoading.value = true; // Show loading indicator
+  isLoading.value = true;
   try {
     const response = await fetch(`${url}?page=${pageNum}`, options);
     const data = await response.json();
 
-    // Filter out duplicates based on the 'id' field
+
     const uniqueMovies = [];
     const seenIds = new Set();
 
@@ -40,11 +38,11 @@ const fetchMovies = async (pageNum = 1) => {
   } catch (error) {
     console.error('Error fetching movies:', error);
   } finally {
-    isLoading.value = false; // Hide loading indicator
+    isLoading.value = false;
   }
 };
 
-// Pagination controls
+
 const nextPage = () => {
   if (page.value < totalPages.value) {
     page.value++;
@@ -58,7 +56,6 @@ const prevPage = () => {
   }
 };
 
-// Fetch initial data on component mount
 onMounted(() => {
   fetchMovies(page.value);
 });
