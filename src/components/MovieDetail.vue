@@ -18,11 +18,11 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import.meta.env.VITE_TMDB_API_KEY;
 
 const route = useRoute();
 const movie = ref(null);
 
-// Fetch movie details based on the ID from the route parameter
 const fetchMovieDetails = async () => {
   const movieId = route.params.id;
   const url = `https://api.themoviedb.org/3/movie/${movieId}`;
@@ -30,7 +30,7 @@ const fetchMovieDetails = async () => {
     method: 'GET',
     headers: {
       accept: 'application/json',
-      Authorization: 'Bearer YOUR_API_KEY', // Replace with your actual TMDb API key
+      Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`, // Replace with your actual TMDb API key
     },
   };
 
