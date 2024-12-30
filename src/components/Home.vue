@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import.meta.env.VITE_TMDB_API_KEY;
+// import.meta.env.VITE_TMDB_API_KEY;
 
 const url = 'https://api.themoviedb.org/3/discover/movie';
 const options = {

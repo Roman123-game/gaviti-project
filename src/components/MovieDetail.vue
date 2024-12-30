@@ -19,7 +19,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import.meta.env.VITE_TMDB_API_KEY;
+// import.meta.env.VITE_TMDB_API_KEY;
 
 const route = useRoute();
 const movie = ref(null);
