@@ -81,7 +81,7 @@ onMounted(() => {
 
 <template>
   <div>
-    <h1>Popular Movies</h1>
+    <h1 class="title">Popular Movies</h1>
 
     <div class="filter-sort-container">
       <div class="filter-container">
@@ -121,9 +121,9 @@ onMounted(() => {
     </div>
 
     <div class="pagination" v-if="movies.length">
-      <button @click="prevPage" :disabled="page === 1">Previous</button>
+      <button @click="prevPage" :disabled="page === 1">&#8592;</button>
       <span>Page {{ page }} of {{ totalPages }}</span>
-      <button @click="nextPage" :disabled="page === totalPages">Next</button>
+      <button @click="nextPage" :disabled="page === totalPages">&#x2192;</button>
     </div>
   </div>
 </template>
@@ -135,6 +135,11 @@ onMounted(() => {
 
 
 <style scoped>
+.title {
+  text-align: center;
+  margin: 20px auto;
+  text-shadow: lightblue 1px 0 10px;
+}
 .filter-sort-container {
   display: flex;
   justify-content: space-between;
@@ -205,7 +210,7 @@ button {
   background-color: lightgreen;
   border: 1px solid black;
   border-radius: 2px;
-  color: whitesmoke;
+
 
 }
 
@@ -215,6 +220,15 @@ button:disabled {
 }
 button:hover {
   border-color: #646cff;
+}
+
+select {
+ background-color: lightsalmon;
+}
+input {
+  background-color: lightpink;
+  border: 1px solid black;
+  border-radius: 2px;
 }
 </style>
 
