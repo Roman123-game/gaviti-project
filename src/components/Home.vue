@@ -11,24 +11,19 @@ const options = {
   }
 };
 
-// Reactive state variables
 const movies = ref([]);
 const page = ref(1);
 const totalPages = ref(1);
 const isLoading = ref(false);
 
-// Date Range State Variables
 const startDate = ref('');
 const endDate = ref('');
 
-// Sorting state variables
 const sortBy = ref('release_date');
 
-// Fetch movies based on date range filter and sorting
 const fetchMovies = async (pageNum = 1, startDate = '', endDate = '', sortBy = 'release_date') => {
-  isLoading.value = true; // Show loading indicator
+  isLoading.value = true;
   try {
-    // Create query parameters based on date range and sorting
     let queryParams = `?page=${pageNum}&sort_by=${sortBy}.desc`;
     if (startDate && endDate) {
       queryParams += `&primary_release_date.gte=${startDate}&primary_release_date.lte=${endDate}`;
@@ -52,21 +47,18 @@ const fetchMovies = async (pageNum = 1, startDate = '', endDate = '', sortBy = '
   } catch (error) {
     console.error('Error fetching movies:', error);
   } finally {
-    isLoading.value = false; // Hide loading indicator
+    isLoading.value = false;
   }
 };
 
-// Function to apply date range filter
 const applyDateRangeFilter = () => {
   fetchMovies(page.value, startDate.value, endDate.value, sortBy.value);
 };
 
-// Function to manually trigger the sorting
 const sortMovies = () => {
   fetchMovies(page.value, startDate.value, endDate.value, sortBy.value);
 };
 
-// Pagination controls
 const nextPage = () => {
   if (page.value < totalPages.value) {
     page.value++;
@@ -80,7 +72,6 @@ const prevPage = () => {
   }
 };
 
-// Fetch initial data on component mount
 onMounted(() => {
   fetchMovies(page.value, startDate.value, endDate.value, sortBy.value);
 });
@@ -92,7 +83,6 @@ onMounted(() => {
   <div>
     <h1>Popular Movies</h1>
 
-    <!-- Filter and Sort Controls in One Line -->
     <div class="filter-sort-container">
       <div class="filter-container">
         <label for="startDate">Start Date:</label>
@@ -114,7 +104,6 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- Movies Grid -->
     <div v-if="isLoading">Loading...</div>
     <div v-else class="movies-grid">
       <div v-for="(movie, index) in movies" :key="movie.id" class="movie-card">
@@ -131,7 +120,6 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- Pagination Controls -->
     <div class="pagination" v-if="movies.length">
       <button @click="prevPage" :disabled="page === 1">Previous</button>
       <span>Page {{ page }} of {{ totalPages }}</span>
@@ -224,6 +212,9 @@ button {
 button:disabled {
   cursor: not-allowed;
   opacity: 0.5;
+}
+button:hover {
+  border-color: #646cff;
 }
 </style>
 
