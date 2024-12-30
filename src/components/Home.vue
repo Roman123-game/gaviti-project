@@ -92,25 +92,26 @@ onMounted(() => {
   <div>
     <h1>Popular Movies</h1>
 
-    <!-- Date Range Filter -->
-    <div class="filter-container">
-      <label for="startDate">Start Date:</label>
-      <input type="date" id="startDate" v-model="startDate" />
+    <!-- Filter and Sort Controls in One Line -->
+    <div class="filter-sort-container">
+      <div class="filter-container">
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" v-model="startDate" />
 
-      <label for="endDate">End Date:</label>
-      <input type="date" id="endDate" v-model="endDate" />
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" v-model="endDate" />
 
-      <button @click="applyDateRangeFilter">Filter</button>
-    </div>
+        <button class="home-button" @click="applyDateRangeFilter">Filter</button>
+      </div>
 
-    <!-- Sorting Options -->
-    <div class="sort-container">
-      <label for="sortBy">Sort By:</label>
-      <select id="sortBy" v-model="sortBy" @change="sortMovies">
-        <option value="release_date">Release Date</option>
-        <option value="title">Title</option>
-        <option value="vote_average">Rating</option>
-      </select>
+      <div class="sort-container">
+        <label for="sortBy">Sort By:</label>
+        <select id="sortBy" v-model="sortBy" @change="sortMovies">
+          <option value="release_date">Release Date</option>
+          <option value="title">Title</option>
+          <option value="vote_average">Rating</option>
+        </select>
+      </div>
     </div>
 
     <!-- Movies Grid -->
@@ -146,6 +147,30 @@ onMounted(() => {
 
 
 <style scoped>
+.filter-sort-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.filter-container,
+.sort-container {
+  display: flex;
+  align-items: center;
+}
+
+.filter-container label,
+.sort-container label {
+  margin-right: 10px;
+}
+
+.filter-container input,
+.sort-container select {
+  margin-right: 10px;
+  padding: 5px;
+}
+
 .movies-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -157,7 +182,7 @@ onMounted(() => {
   padding: 15px;
   border: 1px solid #ccc;
   border-radius: 8px;
-  background: #f9f9f9;
+  background: lightgray;
   text-align: center;
 }
 
@@ -186,9 +211,14 @@ onMounted(() => {
 }
 
 button {
-  padding: 10px;
-  font-size: 14px;
+  padding: 9px;
+  font-size: 8px;
   cursor: pointer;
+  background-color: lightgreen;
+  border: 1px solid black;
+  border-radius: 2px;
+  color: whitesmoke;
+
 }
 
 button:disabled {
