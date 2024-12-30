@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue';
 import.meta.env.VITE_TMDB_API_KEY;
 
-const url = 'https://api.themoviedb.org/3/movie/popular';
+const url = 'https://api.themoviedb.org/3/discover/movie';
 const options = {
   method: 'GET',
   headers: {
@@ -11,17 +11,28 @@ const options = {
   }
 };
 
+// Reactive state variables
 const movies = ref([]);
 const page = ref(1);
 const totalPages = ref(1);
 const isLoading = ref(false);
 
-const fetchMovies = async (pageNum = 1) => {
-  isLoading.value = true;
-  try {
-    const response = await fetch(`${url}?page=${pageNum}`, options);
-    const data = await response.json();
+// Date Range State Variables
+const startDate = ref('');
+const endDate = ref('');
 
+// Fetch movies based on date range filter
+const fetchMovies = async (pageNum = 1, startDate = '', endDate = '') => {
+  isLoading.value = true; // Show loading indicator
+  try {
+    // Create query parameters based on date range
+    let queryParams = `?page=${pageNum}`;
+    if (startDate && endDate) {
+      queryParams += `&primary_release_date.gte=${startDate}&primary_release_date.lte=${endDate}`;
+    }
+
+    const response = await fetch(`${url}${queryParams}`, options);
+    const data = await response.json();
 
     const uniqueMovies = [];
     const seenIds = new Set();
@@ -38,24 +49,30 @@ const fetchMovies = async (pageNum = 1) => {
   } catch (error) {
     console.error('Error fetching movies:', error);
   } finally {
-    isLoading.value = false;
+    isLoading.value = false; // Hide loading indicator
   }
 };
 
+// Function to apply date range filter
+const applyDateRangeFilter = () => {
+  fetchMovies(page.value, startDate.value, endDate.value);
+};
 
+// Pagination controls
 const nextPage = () => {
   if (page.value < totalPages.value) {
     page.value++;
-    fetchMovies(page.value);
+    fetchMovies(page.value, startDate.value, endDate.value);
   }
 };
 const prevPage = () => {
   if (page.value > 1) {
     page.value--;
-    fetchMovies(page.value);
+    fetchMovies(page.value, startDate.value, endDate.value);
   }
 };
 
+// Fetch initial data on component mount
 onMounted(() => {
   fetchMovies(page.value);
 });
@@ -65,7 +82,20 @@ onMounted(() => {
   <div>
     <h1>Popular Movies</h1>
 
-    <div class="movies-grid">
+    <!-- Date Range Filter -->
+    <div class="filter-container">
+      <label for="startDate">Start Date:</label>
+      <input type="date" id="startDate" v-model="startDate" />
+
+      <label for="endDate">End Date:</label>
+      <input type="date" id="endDate" v-model="endDate" />
+
+      <button @click="applyDateRangeFilter">Filter</button>
+    </div>
+
+    <!-- Movies Grid -->
+    <div v-if="isLoading">Loading...</div>
+    <div v-else class="movies-grid">
       <div v-for="(movie, index) in movies" :key="movie.id" class="movie-card">
         <router-link :to="`/movie/${movie.id}`">
           <img
@@ -88,6 +118,7 @@ onMounted(() => {
     </div>
   </div>
 </template>
+
 
 
 
