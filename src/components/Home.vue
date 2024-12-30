@@ -66,44 +66,41 @@ onMounted(() => {
 
 <template>
   <div>
-    <h1>{{ msg }}</h1>
+    <h1>Popular Movies</h1>
 
-    <!-- Loading Indicator -->
-    <div v-if="isLoading">Loading...</div>
-
-    <!-- Movies Grid -->
-    <div v-else>
-      <div class="movies-grid">
-        <div v-for="(movie, index) in movies" :key="index" class="movie-card">
+    <div class="movies-grid">
+      <div v-for="(movie, index) in movies" :key="movie.id" class="movie-card">
+        <router-link :to="`/movie/${movie.id}`">
           <img
             v-if="movie.poster_path"
             :src="`https://image.tmdb.org/t/p/w200${movie.poster_path}`"
             alt="Movie Poster"
           />
           <h3>{{ movie.title }}</h3>
-          <p><strong>Release Date:</strong> {{ movie.release_date }}</p>
-          <p><strong>Rating:</strong> {{ movie.vote_average || 'N/A' }}</p>
-        </div>
+        </router-link>
+        <p><strong>Release Date:</strong> {{ movie.release_date }}</p>
+        <p><strong>Rating:</strong> {{ movie.vote_average || 'N/A' }}</p>
       </div>
+    </div>
 
-      <!-- Pagination Controls -->
-      <div class="pagination" v-if="movies.length">
-        <button @click="prevPage" :disabled="page === 1">Previous</button>
-        <span>Page {{ page }} of {{ totalPages }}</span>
-        <button @click="nextPage" :disabled="page === totalPages">Next</button>
-      </div>
+    <!-- Pagination Controls -->
+    <div class="pagination" v-if="movies.length">
+      <button @click="prevPage" :disabled="page === 1">Previous</button>
+      <span>Page {{ page }} of {{ totalPages }}</span>
+      <button @click="nextPage" :disabled="page === totalPages">Next</button>
     </div>
   </div>
 </template>
 
 
 
+
 <style scoped>
 .movies-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(5, 1fr);
   gap: 20px;
-  margin: 20px 0;
+  margin: 20px 0 0 0;
 }
 
 .movie-card {
