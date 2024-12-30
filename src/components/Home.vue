@@ -21,12 +21,15 @@ const isLoading = ref(false);
 const startDate = ref('');
 const endDate = ref('');
 
-// Fetch movies based on date range filter
-const fetchMovies = async (pageNum = 1, startDate = '', endDate = '') => {
+// Sorting state variables
+const sortBy = ref('release_date');
+
+// Fetch movies based on date range filter and sorting
+const fetchMovies = async (pageNum = 1, startDate = '', endDate = '', sortBy = 'release_date') => {
   isLoading.value = true; // Show loading indicator
   try {
-    // Create query parameters based on date range
-    let queryParams = `?page=${pageNum}`;
+    // Create query parameters based on date range and sorting
+    let queryParams = `?page=${pageNum}&sort_by=${sortBy}.desc`;
     if (startDate && endDate) {
       queryParams += `&primary_release_date.gte=${startDate}&primary_release_date.lte=${endDate}`;
     }
@@ -55,28 +58,35 @@ const fetchMovies = async (pageNum = 1, startDate = '', endDate = '') => {
 
 // Function to apply date range filter
 const applyDateRangeFilter = () => {
-  fetchMovies(page.value, startDate.value, endDate.value);
+  fetchMovies(page.value, startDate.value, endDate.value, sortBy.value);
+};
+
+// Function to manually trigger the sorting
+const sortMovies = () => {
+  fetchMovies(page.value, startDate.value, endDate.value, sortBy.value);
 };
 
 // Pagination controls
 const nextPage = () => {
   if (page.value < totalPages.value) {
     page.value++;
-    fetchMovies(page.value, startDate.value, endDate.value);
+    fetchMovies(page.value, startDate.value, endDate.value, sortBy.value);
   }
 };
 const prevPage = () => {
   if (page.value > 1) {
     page.value--;
-    fetchMovies(page.value, startDate.value, endDate.value);
+    fetchMovies(page.value, startDate.value, endDate.value, sortBy.value);
   }
 };
 
 // Fetch initial data on component mount
 onMounted(() => {
-  fetchMovies(page.value);
+  fetchMovies(page.value, startDate.value, endDate.value, sortBy.value);
 });
 </script>
+
+
 
 <template>
   <div>
@@ -91,6 +101,16 @@ onMounted(() => {
       <input type="date" id="endDate" v-model="endDate" />
 
       <button @click="applyDateRangeFilter">Filter</button>
+    </div>
+
+    <!-- Sorting Options -->
+    <div class="sort-container">
+      <label for="sortBy">Sort By:</label>
+      <select id="sortBy" v-model="sortBy" @change="sortMovies">
+        <option value="release_date">Release Date</option>
+        <option value="title">Title</option>
+        <option value="vote_average">Rating</option>
+      </select>
     </div>
 
     <!-- Movies Grid -->
@@ -118,6 +138,8 @@ onMounted(() => {
     </div>
   </div>
 </template>
+
+
 
 
 
