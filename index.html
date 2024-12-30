@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + Vue</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
+
+
+import { createRouter, createWebHistory } from 'vue-router';
+import Home from '@/views/Home.vue';  // Assuming your home page component is called Home.vue
+import MovieDetail from '@/views/MovieDetail.vue';  // We'll create this next
+
+const routes = [
+  {
+    path: '/',
+    name: 'Home',
+    component: Home
+  },
+  {
+    path: '/movie/:id',  // Dynamic route to handle movie details
+    name: 'MovieDetail',
+    component: () => import('@/views/MovieDetail.vue')
+  }
+];
+
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
+  routes
+});
+
+export default router;
